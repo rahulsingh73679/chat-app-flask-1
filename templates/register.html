@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <style>
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body Styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            padding: 10px; /* Add padding for mobile view */
+        }
+
+        /* Header */
+        h1 {
+            font-size: 28px;
+            color: #0070ba;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        /* Form Styling */
+        form {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 350px;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 16px;
+            color: #333;
+            text-align: left; /* Align labels to the left */
+        }
+
+        input[type="text"], input[type="password"], input[type="email"] {
+            width: calc(100% - 24px); /* Adjust for padding and border */
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            color: #333;
+        }
+
+        button {
+            background-color: #0070ba;
+            color: #ffffff;
+            border: none;
+            padding: 12px;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #005a9c;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 24px;
+            }
+
+            form {
+                padding: 15px;
+                width: 100%;
+                max-width: 300px;
+            }
+
+            input[type="text"], input[type="password"], input[type="email"] {
+                padding: 10px;
+                font-size: 14px;
+            }
+
+            button {
+                padding: 10px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Register</h1>
+    <form method="POST" action="{{ url_for('register') }}">
+        <label for="username">Username:</label>
+        <input type="text" name="username" id="username" required>
+        
+        <label for="email">Email:</label>
+        <input type="email" name="email" id="email" required>
+        
+        <label for="password">Password:</label>
+        <input type="password" name="password" id="password" required>
+        
+        <button type="submit">Register</button>
+    </form>
+</body>
+</html>

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+            display: flex;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .chat-container {
+            display: flex;
+            width: 100%;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: #ffffff;
+            border-right: 1px solid #ddd;
+            padding: 20px;
+            box-shadow: 2px 0 4px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+        }
+
+        .chat-box {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            height: calc(100vh - 40px);
+            overflow-y: auto;
+        }
+
+        .message {
+            margin-bottom: 10px;
+        }
+
+        .message .sender {
+            font-weight: bold;
+            color: #0070ba;
+        }
+
+        .message .timestamp {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .message .content {
+            margin-top: 5px;
+        }
+
+        .typing-indicator {
+            font-style: italic;
+            color: #999;
+            margin-bottom: 10px;
+        }
+
+        .message-form {
+            display: flex;
+            align-items: center;
+            padding-top: 10px;
+            border-top: 1px solid #ddd;
+        }
+
+        .message-input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .send-button {
+            background-color: #0070ba;
+            color: #ffffff;
+            border: none;
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-left: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        .send-button:hover {
+            background-color: #005a9c;
+        }
+
+        .active-users {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        .emoji-picker, .gif-picker {
+            margin-top: 10px;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 600px) {
+            .sidebar {
+                display: none;
+            }
+
+            .chat-box {
+                margin: 0;
+                height: calc(100vh - 60px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="sidebar">
+            <h2>Active Users</h2>
+            <div id="active-users">
+                <!-- List of active users will be dynamically populated here -->
+            </div>
+        </div>
+
+        <div class="chat-box">
+            <h1>Chat with {{ user.username }}</h1>
+            <div id="messages">
+                {% for message in messages %}
+                <div class="message">
+                    <span class="sender">{{ message.sender.username }}:</span>
+                    <div class="content">{{ message.content }}</div>
+                    <div class="timestamp">{{ message.timestamp }}</div>
+                </div>
+                {% endfor %}
+            </div>
+            <div id="typing-indicator" class="typing-indicator"></div>
+            <form id="message-form" class="message-form">
+                <input type="text" id="message-input" class="message-input" placeholder="Type a message...">
+                <button type="button" id="send-button" class="send-button">Send</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Socket.IO -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.min.js"></script>
+    <script>
+        const socket = io.connect('http://' + document.domain + ':' + location.port);
+    
+        // Handle incoming messages
+        socket.on('new_message', function(data) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message';
+            messageDiv.innerHTML = `<span class="sender">${data.sender}:</span><div class="content">${data.content}</div><div class="timestamp">${data.timestamp}</div>`;
+            document.getElementById('messages').appendChild(messageDiv);
+        });
+    
+        // Handle typing indicator
+        socket.on('typing', function(data) {
+            document.getElementById('typing-indicator').innerText = `${data.username} is typing...`;
+        });
+    
+        // Handle user list update
+        socket.on('update_users', function(users) {
+            const userList = document.getElementById('active-users');
+            userList.innerHTML = '';
+            users.forEach(function(user) {
+                const userDiv = document.createElement('div');
+                userDiv.innerText = user;
+                userList.appendChild(userDiv);
+            });
+        });
+    
+        // Send a message
+        document.getElementById('send-button').addEventListener('click', function() {
+            const messageInput = document.getElementById('message-input');
+            const message = messageInput.value.trim();
+            if (message) {
+                socket.emit('send_message', message);
+                messageInput.value = '';
+            }
+        });
+    
+        // Notify server when typing
+        document.getElementById('message-input').addEventListener('input', function() {
+            socket.emit('typing');
+        });
+    </script>
+    
+</body>
+</html>

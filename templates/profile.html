@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ user.username }}'s Profile</title>
+    <style>
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body Styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            height: 100vh; /* Ensure full height on mobile */
+        }
+
+        h1 {
+            color: #0070ba;
+            font-size: 24px; /* Adjust font size for mobile */
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .profile-box {
+            width: 100%;
+            max-width: 350px; /* Make the box responsive */
+            background-color: #fff;
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .profile-picture {
+            width: 120px; /* Adjust size for mobile */
+            height: 120px; /* Adjust size for mobile */
+            border-radius: 50%;
+            margin-bottom: 20px;
+            object-fit: cover; /* Ensure the image is well-fitted */
+        }
+
+        p {
+            font-size: 16px; /* Adjust font size for mobile */
+            margin-bottom: 10px;
+        }
+
+        .status {
+            font-size: 14px;
+            color: #999;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 600px) {
+            .profile-box {
+                padding: 15px;
+                max-width: 100%;
+            }
+
+            .profile-picture {
+                width: 100px; /* Smaller size for very small screens */
+                height: 100px; /* Smaller size for very small screens */
+            }
+
+            h1 {
+                font-size: 22px;
+            }
+
+            p {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>{{ user.username }}'s Profile</h1>
+    <div class="profile-box">
+        {% if user.profile_picture %}
+        <img src="{{ url_for('static', filename='profile_pictures/' + user.profile_picture) }}" alt="Profile Picture" class="profile-picture">
+        {% else %}
+        <img src="{{ url_for('static', filename='profile_pictures/default.png') }}" alt="Default Profile Picture" class="profile-picture">
+        {% endif %}
+        <p><strong>Email:</strong> {{ user.email }}</p>
+        <p class="status"><strong>Status:</strong> {{ user.status }}</p>
+    </div>
+</body>
+</html>

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flask Chat App</title>
+    <style>
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body Styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        /* Navbar */
+        .navbar {
+            background-color: #0070ba;
+            padding: 15px 0;
+            color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        .navbar .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0 10px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            margin-bottom: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        .nav-links a {
+            margin: 5px 0;
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            padding: 10px 20px;
+            border-radius: 4px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            width: 100%;
+            text-align: center;
+        }
+
+        .nav-links a:hover {
+            opacity: 0.9;
+            transform: scale(1.05);
+        }
+
+        .login-btn {
+            background-color: #ffffff;
+            color: #0070ba;
+            border: 1px solid #0070ba;
+        }
+
+        .profile-btn {
+            background-color: #4caf50; /* Green */
+            color: #ffffff;
+        }
+
+        .group-chat-btn {
+            background-color: #ff9800; /* Orange */
+            color: #ffffff;
+        }
+
+        .chat-btn {
+            background-color: #2196f3; /* Blue */
+            color: #ffffff;
+        }
+
+        .login-btn:hover {
+            background-color: #e0e0e0;
+        }
+
+        .logout-btn {
+            background-color: #ff4b4b;
+            color: #ffffff;
+            border: 1px solid #ff4b4b;
+        }
+
+        .logout-btn:hover {
+            background-color: #e0e0e0;
+        }
+
+        /* Hero Section */
+        .hero {
+            background-color: #0070ba;
+            color: white;
+            padding: 80px 20px;
+            text-align: center;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            margin-top: 60px; /* To account for the fixed navbar */
+        }
+
+        .hero h1 {
+            font-size: 28px;
+            margin-bottom: 15px;
+        }
+
+        .hero p {
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="container">
+            <a href="/" class="logo">ChatApp</a>
+            <div class="nav-links">
+                {% if username %}
+                    <span>Hello, {{ username }}!</span>
+                    <a href="{{ url_for('logout') }}" class="btn logout-btn">Logout</a>
+                    <a href="{{ url_for('profile', username=username) }}" class="btn profile-btn">Profile</a>
+                    <a href="{{ url_for('chat', user_id=user.id) }}" class="btn chat-btn">Chat</a>
+                    <a href="{{ url_for('group_chat', group_id=1) }}" class="btn group-chat-btn">Group Chat</a> <!-- Example group_id -->
+                {% else %}
+                    <a href="{{ url_for('login') }}" class="btn login-btn">Login</a>
+                    <a href="{{ url_for('register') }}" class="btn login-btn">Register</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="hero">
+        <div class="container">
+            <h1>Welcome to Flask Chat App</h1>
+            <p>Communicate with your friends and family in real-time.</p>
+        </div>
+    </div>
+</body>
+</html>
